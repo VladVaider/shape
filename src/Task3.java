@@ -1,24 +1,19 @@
-import java.io.BufferedReader;
+mport java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Task3 {
-    public static void main(String[] args) {
-        String filename = "words.txt";
-        Map<String, Integer> wordFrequency = countWordFrequency(filename);
-        for (Map.Entry<String, Integer> entry : wordFrequency.entrySet()) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
-    }
+public class WordFrequencyCounter {
 
-    public static Map<String, Integer> countWordFrequency(String filename) {
+    public static Map<String, Integer> countWordFrequency(String fileName) {
         Map<String, Integer> wordFrequency = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] words = line.split("\\s+"); // Розділяємо рядок за допомогою пробілів або переносу рядка
+                String[] words = line.trim().split("\\s+");
                 for (String word : words) {
                     wordFrequency.put(word, wordFrequency.getOrDefault(word, 0) + 1);
                 }
@@ -26,6 +21,16 @@ public class Task3 {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return wordFrequency;
+    }
+
+    public static void main(String[] args) {
+        String fileName = "words.txt";
+        Map<String, Integer> wordFrequency = countWordFrequency(fileName);
+
+        wordFrequency.entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue())) // сортуємо за значенням (частотою)
+                .forEach(entry -> System.out.println(entry.getKey() + " " + entry.getValue()));
     }
 }
