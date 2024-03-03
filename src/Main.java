@@ -1,18 +1,14 @@
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
 
     public static String oddIndexedNames(List<String> names) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < names.size(); i++) {
-            if (i % 2 == 0) { // Перевіряємо, чи є індекс непарним
-                if (result.length() > 0) {
-                    result.append(", "); // Додаємо кому, якщо це не перше ім'я
-                }
-                result.append((i + 1)).append(". ").append(names.get(i));
-            }
-        }
-        return result.toString();
+        return IntStream.range(0, names.size())
+                .filter(i -> i % 2 == 0) // Відбираємо індекси, що є непарними
+                .mapToObj(i -> (i + 1) + ". " + names.get(i)) // Формуємо рядок для кожного відібраного індексу
+                .collect(Collectors.joining(", ")); // З'єднуємо рядки через кому
     }
 
     public static void main(String[] args) {

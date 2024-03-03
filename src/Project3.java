@@ -1,31 +1,16 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Project3 {
 
     public static String sortedNumbers(String[] arr) {
-        // Створюємо список для зберігання чисел
-        List<Integer> numbers = new ArrayList<>();
-
-        // Проходимо по кожному рядку масиву
-        for (String s : arr) {
-            // Розділяємо рядок на числа за комами
-            String[] parts = s.split(", ");
-            // Конвертуємо кожну частину у ціле число і додаємо його до списку чисел
-            for (String part : parts) {
-                numbers.add(Integer.parseInt(part));
-            }
-        }
-
-        // Сортуємо числа
-        numbers.sort(Integer::compareTo);
-
-        // Формуємо результуючий рядок, розділяючи числа комами
-        return numbers.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
+        return Arrays.stream(arr) // Перетворюємо масив в потік
+                .flatMap(s -> Arrays.stream(s.split(", "))) // Розділяємо кожен рядок на числа та об'єднуємо їх у один потік
+                .map(Integer::parseInt) // Конвертуємо кожний рядок у ціле число
+                .sorted() // Сортуємо числа
+                .map(Object::toString) // Конвертуємо числа назад у рядки
+                .collect(Collectors.joining(", ")); // З'єднуємо всі рядки через кому
     }
 
     public static void main(String[] args) {
